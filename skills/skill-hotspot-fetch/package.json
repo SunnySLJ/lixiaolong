@@ -1,0 +1,14 @@
+{
+  "name": "skill-hotspot-fetch",
+  "version": "1.0.0",
+  "description": "热点抓取 Skill - 从多平台获取热点话题数据",
+  "main": "index.js",
+  "type": "openclaw-skill",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "keywords": ["hotspot", "trend", "crawler"],
+  "dependencies": {
+    "axios": "^1.6.0"
+  }
+}

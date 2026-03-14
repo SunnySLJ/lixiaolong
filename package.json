@@ -1,0 +1,35 @@
+{
+  "name": "lixiaolong",
+  "version": "1.0.0",
+  "description": "视频自动化生产系统 - 帧龙虾",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node src/index.js",
+    "skill:hotspot-fetch": "openclaw skill run skills/skill-hotspot-fetch",
+    "skill:copywrite": "openclaw skill run skills/skill-copywrite-gen",
+    "skill:video-edit": "openclaw skill run skills/skill-video-edit",
+    "skill:publish": "openclaw skill run skills/skill-platform-publish"
+  },
+  "keywords": [
+    "video",
+    "automation",
+    "openclaw",
+    "skill",
+    "ai",
+    "content-generation"
+  ],
+  "author": "帧龙虾",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.0",
+    "dotenv": "^16.3.0",
+    "ffmpeg-static": "^5.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.55.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
