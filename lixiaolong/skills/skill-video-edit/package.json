@@ -1,0 +1,12 @@
+{
+  "name": "skill-video-edit",
+  "version": "1.0.0",
+  "description": "视频混剪 Skill - 自动化视频制作",
+  "main": "index.js",
+  "type": "openclaw-skill",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "keywords": ["video", "ffmpeg", "editing"],
+  "dependencies": {}
+}
