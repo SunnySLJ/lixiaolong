@@ -1,0 +1,45 @@
+# 依赖
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# 环境变量
+.env
+
+# 构建输出
+dist/
+build/
+
+# 日志
+logs/
+*.log
+
+# 系统文件
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 临时文件
+tmp/
+temp/
+*.tmp
+
+# 大数据文件
+*.mp4
+*.mov
+*.avi
+materials/
+data/wake/*.json
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/

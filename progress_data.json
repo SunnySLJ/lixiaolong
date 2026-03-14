@@ -1,0 +1,320 @@
+{
+  "title": "六位一体 - 智能内容生产流水线",
+  "phases": [
+    {
+      "number": 1,
+      "name": "Phase 1: MVP 开发 (2 周)",
+      "status": "in_progress",
+      "progress": 14.285714285714285,
+      "tasks": [
+        {
+          "name": "TrendRadar 安装和配置",
+          "status": "done"
+        },
+        {
+          "name": "知乎热榜抓取（20 条/次）",
+          "status": "done"
+        },
+        {
+          "name": "B 站热门抓取（20 条/次）",
+          "status": "done"
+        },
+        {
+          "name": "并行优化（0.5 秒完成）",
+          "status": "done"
+        },
+        {
+          "name": "抖音 API 对接",
+          "status": "pending"
+        },
+        {
+          "name": "微博 API 对接",
+          "status": "pending"
+        },
+        {
+          "name": "小红书 API 对接",
+          "status": "pending"
+        },
+        {
+          "name": "定时任务（每小时）",
+          "status": "pending"
+        },
+        {
+          "name": "ScriptBot 创建",
+          "status": "pending"
+        },
+        {
+          "name": "SOUL.md 品牌调性定义",
+          "status": "pending"
+        },
+        {
+          "name": "LLM 脚本生成模板",
+          "status": "pending"
+        },
+        {
+          "name": "A/B 测试框架",
+          "status": "pending"
+        },
+        {
+          "name": "素材库结构设计",
+          "status": "pending"
+        },
+        {
+          "name": "向量数据库搭建",
+          "status": "pending"
+        },
+        {
+          "name": "语义匹配算法",
+          "status": "pending"
+        },
+        {
+          "name": "音画同步逻辑",
+          "status": "pending"
+        },
+        {
+          "name": "ffmpeg 自动剪辑",
+          "status": "pending"
+        },
+        {
+          "name": "模板系统",
+          "status": "pending"
+        },
+        {
+          "name": "批量渲染",
+          "status": "pending"
+        },
+        {
+          "name": "质量检查",
+          "status": "pending"
+        },
+        {
+          "name": "B 站 API 对接",
+          "status": "pending"
+        },
+        {
+          "name": "YouTube API 对接",
+          "status": "pending"
+        },
+        {
+          "name": "发布时间优化",
+          "status": "pending"
+        },
+        {
+          "name": "多账号管理",
+          "status": "pending"
+        },
+        {
+          "name": "播放数据统计",
+          "status": "pending"
+        },
+        {
+          "name": "转化率追踪",
+          "status": "pending"
+        },
+        {
+          "name": "报表生成",
+          "status": "pending"
+        },
+        {
+          "name": "可视化 UI",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "name": "Phase 2: 核心功能 (4 周)",
+      "status": "pending",
+      "progress": 0.0,
+      "tasks": [
+        {
+          "name": "抖音发布 API",
+          "status": "pending"
+        },
+        {
+          "name": "快手发布 API",
+          "status": "pending"
+        },
+        {
+          "name": "小红书发布 API",
+          "status": "pending"
+        },
+        {
+          "name": "微信视频号 API",
+          "status": "pending"
+        },
+        {
+          "name": "淘宝直播 API",
+          "status": "pending"
+        },
+        {
+          "name": "多模型支持",
+          "status": "pending"
+        },
+        {
+          "name": "脚本质量评分",
+          "status": "pending"
+        },
+        {
+          "name": "自动优化建议",
+          "status": "pending"
+        },
+        {
+          "name": "热点预测算法",
+          "status": "pending"
+        },
+        {
+          "name": "私有素材上传",
+          "status": "pending"
+        },
+        {
+          "name": "智能标签系统",
+          "status": "pending"
+        },
+        {
+          "name": "版权检测",
+          "status": "pending"
+        },
+        {
+          "name": "素材推荐",
+          "status": "pending"
+        },
+        {
+          "name": "4K 渲染支持",
+          "status": "pending"
+        },
+        {
+          "name": "多分辨率适配",
+          "status": "pending"
+        },
+        {
+          "name": "水印系统",
+          "status": "pending"
+        },
+        {
+          "name": "字幕生成",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "name": "Phase 3: 规模化 (8 周)",
+      "status": "pending",
+      "progress": 0.0,
+      "tasks": [
+        {
+          "name": "渲染集群搭建",
+          "status": "pending"
+        },
+        {
+          "name": "负载均衡",
+          "status": "pending"
+        },
+        {
+          "name": "自动扩缩容",
+          "status": "pending"
+        },
+        {
+          "name": "故障转移",
+          "status": "pending"
+        },
+        {
+          "name": "并发抓取优化",
+          "status": "pending"
+        },
+        {
+          "name": "批量处理优化",
+          "status": "pending"
+        },
+        {
+          "name": "缓存策略",
+          "status": "pending"
+        },
+        {
+          "name": "CDN 加速",
+          "status": "pending"
+        },
+        {
+          "name": "国内平台（30+）",
+          "status": "pending"
+        },
+        {
+          "name": "海外平台（35+）",
+          "status": "pending"
+        },
+        {
+          "name": "API 统一管理",
+          "status": "pending"
+        },
+        {
+          "name": "账号池管理",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "name": "Phase 4: 优化迭代 (持续)",
+      "status": "pending",
+      "progress": 0.0,
+      "tasks": [
+        {
+          "name": "38 项指标追踪",
+          "status": "pending"
+        },
+        {
+          "name": "智能归因分析",
+          "status": "pending"
+        },
+        {
+          "name": "A/B 测试自动化",
+          "status": "pending"
+        },
+        {
+          "name": "趋势预测",
+          "status": "pending"
+        },
+        {
+          "name": "发布时间优化",
+          "status": "pending"
+        },
+        {
+          "name": "标题标签优化",
+          "status": "pending"
+        },
+        {
+          "name": "内容策略优化",
+          "status": "pending"
+        },
+        {
+          "name": "投放策略优化",
+          "status": "pending"
+        },
+        {
+          "name": "数据→创意反馈",
+          "status": "pending"
+        },
+        {
+          "name": "自动策略调整",
+          "status": "pending"
+        },
+        {
+          "name": "异常检测告警",
+          "status": "pending"
+        },
+        {
+          "name": "自学习系统",
+          "status": "pending"
+        }
+      ]
+    }
+  ],
+  "last_update": "2026-03-13T16:04:29.603318",
+  "stats": {
+    "total_tasks": 69,
+    "completed_tasks": 4,
+    "in_progress_tasks": 1,
+    "overall_progress": 5.797101449275362
+  }
+}
