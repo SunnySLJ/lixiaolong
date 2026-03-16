@@ -28,10 +28,9 @@ async def main():
     print("=" * 60)
     print()
     
-    # 获取配置名称
-    profile = input("请输入配置名称（默认：default）：").strip() or "default"
-    
-    print(f"\n使用配置：{profile}")
+    # 获取配置名称（自动使用 default）
+    profile = "default"
+    print(f"使用配置：{profile}")
     print()
     
     # 创建发布器

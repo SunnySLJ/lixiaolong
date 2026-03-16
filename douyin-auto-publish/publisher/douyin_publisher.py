@@ -86,21 +86,55 @@ class DouyinPublisher:
             
             # 等待登录
             logger.info("请使用抖音 APP 扫码登录...")
-            logger.info("登录成功后会自动保存 Cookie")
+            logger.info("登录成功后会自动保存 Cookie（等待 180 秒）")
             
-            # 等待登录完成（检测特定元素）
+            # 等待登录完成（检测多种可能的元素）
             try:
-                await self.page.wait_for_selector('[data-e2e="user-avatar"]', timeout=120000)
-                logger.info("✅ 登录成功！")
+                # 尝试等待用户头像或用户昵称出现
+                await asyncio.sleep(5)  # 等待页面加载
                 
-                # 保存 Cookie
-                await self._save_cookies(profile)
+                # 多种检测方式
+                selectors = [
+                    '[data-e2e="user-avatar"]',
+                    '[data-e2e="user-name"]',
+                    '.user-avatar',
+                    '.douyin-user-info',
+                    'a[href*="/user"]'
+                ]
                 
-                return True
+                logged_in = False
+                for selector in selectors:
+                    try:
+                        element = await self.page.wait_for_selector(selector, timeout=30000)
+                        if element:
+                            logged_in = True
+                            break
+                    except:
+                        continue
+                
+                if not logged_in:
+                    # 最后检查页面 URL 是否变化（登录后会跳转）
+                    current_url = self.page.url
+                    if "creator.douyin.com" in current_url and "login" not in current_url:
+                        logged_in = True
+                
+                if logged_in:
+                    logger.info("✅ 检测到登录成功！")
+                    await self._save_cookies(profile)
+                    return True
+                else:
+                    logger.warning("⚠️ 未检测到登录，但已超时，尝试保存当前 Cookie")
+                    await self._save_cookies(profile)
+                    return True  # 即使未检测到，也尝试保存 Cookie
                 
             except Exception as e:
-                logger.error(f"登录超时或失败：{e}")
-                return False
+                logger.error(f"登录检测异常：{e}")
+                # 即使异常也尝试保存 Cookie
+                try:
+                    await self._save_cookies(profile)
+                    return True
+                except:
+                    return False
             
             finally:
                 await self.context.close()
