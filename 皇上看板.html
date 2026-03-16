@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>👑 皇上看板 - 项目进度监控</title>
+    <style>
+        :root {
+            --primary: #0f172a;
+            --secondary: #334155;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --radius: 12px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: var(--primary);
+            color: white;
+            padding: 1.5rem 2rem;
+            box-shadow: var(--shadow-lg);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .navbar-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .navbar-subtitle {
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+
+        .navbar-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 9999px;
+            font-size: 0.875rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .main-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--accent);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-change {
+            font-size: 0.875rem;
+            color: var(--success);
+        }
+
+        .progress-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .progress-bar-container {
+            background: #e2e8f0;
+            border-radius: 9999px;
+            height: 12px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, var(--accent), #f97316);
+            height: 100%;
+            border-radius: 9999px;
+            transition: width 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .progress-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .progress-stat {
+            text-align: center;
+        }
+
+        .progress-stat-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .progress-stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .phases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .phase-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .phase-header {
+            padding: 1.5rem;
+            color: white;
+        }
+
+        .phase-1 .phase-header { background: linear-gradient(135deg, #0ea5e9, #0284c7); }
+        .phase-2 .phase-header { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+        .phase-3 .phase-header { background: linear-gradient(135deg, #10b981, #059669); }
+
+        .phase-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .phase-subtitle {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        .phase-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .phase-body {
+            padding: 1.5rem;
+        }
+
+        .task-list {
+            list-style: none;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .task-item:last-child { border-bottom: none; }
+
+        .task-checkbox {
+            width: 1.25rem;
+            height: 1.25rem;
+            border: 2px solid #cbd5e1;
+            border-radius: 6px;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .task-checkbox:checked {
+            background: var(--success);
+            border-color: var(--success);
+        }
+
+        .task-checkbox:checked::after {
+            content: '✓';
+            position: absolute;
+            color: white;
+            font-size: 0.875rem;
+            font-weight: 700;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .task-content { flex: 1; }
+
+        .task-text {
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        .task-item.completed .task-text {
+            text-decoration: line-through;
+            color: var(--text-muted);
+        }
+
+        .task-priority {
+            display: inline-block;
+            padding: 0.125rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        .priority-p0 { background: #fee2e2; color: #991b1b; }
+        .priority-p1 { background: #fef3c7; color: #92400e; }
+        .priority-p2 { background: #dbeafe; color: #1e40af; }
+
+        .modules-section {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .module-item {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 1rem;
+            border-left: 3px solid var(--accent);
+        }
+
+        .module-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .module-progress-bar {
+            background: #e2e8f0;
+            border-radius: 4px;
+            height: 6px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .module-progress-fill {
+            background: var(--accent);
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .module-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .activity-section {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .activity-list { list-style: none; }
+
+        .activity-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .activity-item:last-child { border-bottom: none; }
+
+        .activity-time {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            min-width: 80px;
+        }
+
+        .activity-content { flex: 1; }
+
+        .activity-text {
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-type {
+            display: inline-block;
+            padding: 0.125rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .type-commit { background: #dbeafe; color: #1e40af; }
+        .type-feature { background: #dcfce7; color: #166534; }
+        .type-fix { background: #fee2e2; color: #991b1b; }
+
+        @media (max-width: 768px) {
+            .navbar-content { flex-direction: column; gap: 1rem; text-align: center; }
+            .stats-grid, .phases-grid, .modules-grid, .progress-stats { grid-template-columns: 1fr; }
+        }
+
+        function toggleTask(checkbox) {
+            checkbox.classList.toggle('checked');
+            const taskItem = checkbox.closest('.task-item');
+            taskItem.classList.toggle('completed');
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const completed = document.querySelectorAll('.task-item.completed').length;
+            const total = document.querySelectorAll('.task-item').length;
+            const progress = Math.round((completed / total) * 100);
+            
+            document.getElementById('overallProgress').textContent = progress + '%';
+            document.getElementById('mainProgressBar').style.width = progress + '%';
+        }
+
+        updateProgress();
+    </script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="navbar-brand">
+                <div>
+                    <div class="navbar-title">👑 皇上看板</div>
+                    <div class="navbar-subtitle">项目进度监控系统</div>
+                </div>
+            </div>
+            <div class="navbar-status">
+                <span class="status-dot"></span>
+                <span>系统运行正常</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">总体进度</div>
+                <div class="stat-value" id="overallProgress">33%</div>
+                <div class="stat-change">↑ 第一阶段进行中</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">总任务数</div>
+                <div class="stat-value">18</div>
+                <div class="stat-change" style="color: var(--text-muted);">6 个已完成</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Agents</div>
+                <div class="stat-value">7</div>
+                <div class="stat-change">✓ 全部就绪</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Skills</div>
+                <div class="stat-value">5</div>
+                <div class="stat-change">↑ 已安装</div>
+            </div>
+        </div>
+
+        <div class="progress-card">
+            <div class="progress-header">
+                <div class="progress-title">📊 项目总体进度</div>
+                <div style="font-size: 0.875rem; color: var(--text-muted);">
+                    最后更新：<span id="lastUpdate">刚刚</span>
+                </div>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="mainProgressBar" style="width: 33%"></div>
+            </div>
+            <div class="progress-stats">
+                <div class="progress-stat">
+                    <div class="progress-stat-value" style="color: var(--success);">6</div>
+                    <div class="progress-stat-label">已完成</div>
+                </div>
+                <div class="progress-stat">
+                    <div class="progress-stat-value" style="color: var(--accent);">12</div>
+                    <div class="progress-stat-label">进行中</div>
+                </div>
+                <div class="progress-stat">
+                    <div class="progress-stat-value" style="color: var(--text-muted);">0</div>
+                    <div class="progress-stat-label">未开始</div>
+                </div>
+                <div class="progress-stat">
+                    <div class="progress-stat-value" style="color: var(--danger);">0</div>
+                    <div class="progress-stat-label">已延期</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="phases-grid">
+            <div class="phase-card phase-1">
+                <div class="phase-header">
+                    <div class="phase-title">🚀 第一阶段：MVP</div>
+                    <div class="phase-subtitle">2-3 周</div>
+                    <div class="phase-badge">3/6 完成</div>
+                </div>
+                <div class="phase-body">
+                    <ul class="task-list">
+                        <li class="task-item completed">
+                            <div class="task-checkbox" onclick="toggleTask(this)" checked></div>
+                            <div class="task-content">
+                                <div class="task-text">
+                                    搭建基础框架
+                                    <span class="task-priority priority-p0">P0</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="task-item completed">
+                            <div class="task-checkbox" onclick="toggleTask(this)" checked></div>
+                            <div class="task-content">
+                                <div class="task-text">
+                                    实现热点抓取
+                                    <span class="task-priority priority-p0">P0</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="task-item completed">
+                            <div class="task-checkbox" onclick="toggleTask(this)" checked></div>
+                            <div class="task-content">
+                                <div class="task-text">
+                                    LLM 文案生成
+                                    <span class="task-priority priority-p0">P0</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="task-item">
+                            <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                            <div class="task-content">
+                                <div class="task-text">
+                                    基础素材库
+                                    <span class="task-priority priority-p1">P1</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="task-item">
+                            <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                            <div class="task-content">
+                                <div class="task-text">
+                                    FFmpeg 混剪
+                                    <span class="task-priority priority-p1">P1</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="task-item">
+                            <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                            <div class="task-content">
+                                <div class="task-text">
+                                    输出第一条视频
+                                    <span class="task-priority priority-p0">P0</span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="phase-card phase-2">
+                <div class="phase-header">
+                    <div class="phase-title">📈 第二阶段：自动化</div>
+                    <div class="phase-subtitle">3-4 周</div>
+                    <div class="phase-badge">0/6 完成</div>
+                </div>
+                <div class="phase-body">
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                            <div class="task-content">
+                                <div class="task-text">
+                                    智小红/智小抖 API
+                                    <span class="task-priority priority-p0">P0</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="task-item">
+                            <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                            <div class="task-content">
+                                <div class="task-text">
+                                    爆款结构库
+                                    <span class="task-priority priority-p1">P1</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="task-item">
+                            <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                            <div class="task-content">
+                                <div class="task-text">
+                                    MinIO 存储
+                                    <span class="task-priority priority-p1">P1</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="task-item">
+                            <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                            <div class="task-content">
+                                <div class="task-text">
+                                    OCR 字幕
+                                    <span class="task-priority priority-p1">P1</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="task-item">
+                            <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                            <div class="task-content">
+                                <div class="task-text">
+                                    定时任务
+                                    <span class="task-priority priority-p1">P1</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="task-item">
+                            <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                            <div class="task-content">
+                                <div class="task-text">
+                                    数据监控
+                                    <span class="task-priority priority-p1">P1</span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="phase-card phase-3">
+                <div class="phase-header">
+                    <div class="phase-title">🎯 第三阶段：智能化</div>
+                    <div class="phase-subtitle">4-6 周</div>
+                    <div class="phase-badge">0/6 完成</div>
+                </div>
+                <div class="phase-body">
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                            <div class="task-content">
+                                <div class="task-text">
+                                    语义素材匹配
+                                    <span class="task-priority priority-p1">P1</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="task-item">
+                            <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                            <div class="task-content">
+                                <div class="task-text">
+                                    多 LLM 路由
+                                    <span class="task-priority priority-p1">P1</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="task-item">
+                            <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                            <div class="task-content">
+                                <div class="task-text">
+                                    自动封面
+                                    <span class="task-priority priority-p1">P1</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="task-item">
+                            <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                            <div class="task-content">
+                                <div class="task-text">
+                                    多平台发布
+                                    <span class="task-priority priority-p0">P0</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="task-item">
+                            <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                            <div class="task-content">
+                                <div class="task-text">
+                                    A/B 测试
+                                    <span class="task-priority priority-p2">P2</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="task-item">
+                            <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                            <div class="task-content">
+                                <div class="task-text">
+                                    效果反馈
+                                    <span class="task-priority priority-p1">P1</span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="modules-section">
+            <div class="section-title">🧩 模块进度</div>
+            <div class="modules-grid">
+                <div class="module-item">
+                    <div class="module-name">📡 热点感知</div>
+                    <div class="module-progress-bar">
+                        <div class="module-progress-fill" style="width: 80%"></div>
+                    </div>
+                    <div class="module-stats">
+                        <span>4/5</span>
+                        <span>80%</span>
+                    </div>
+                </div>
+                <div class="module-item">
+                    <div class="module-name">🧠 爆款分析</div>
+                    <div class="module-progress-bar">
+                        <div class="module-progress-fill" style="width: 0%"></div>
+                    </div>
+                    <div class="module-stats">
+                        <span>0/8</span>
+                        <span>0%</span>
+                    </div>
+                </div>
+                <div class="module-item">
+                    <div class="module-name">📝 内容生成</div>
+                    <div class="module-progress-bar">
+                        <div class="module-progress-fill" style="width: 75%"></div>
+                    </div>
+                    <div class="module-stats">
+                        <span>3/4</span>
+                        <span>75%</span>
+                    </div>
+                </div>
+                <div class="module-item">
+                    <div class="module-name">🗄️ 素材管理</div>
+                    <div class="module-progress-bar">
+                        <div class="module-progress-fill" style="width: 60%"></div>
+                    </div>
+                    <div class="module-stats">
+                        <span>2/4</span>
+                        <span>60%</span>
+                    </div>
+                </div>
+                <div class="module-item">
+                    <div class="module-name">🎬 视频生产</div>
+                    <div class="module-progress-bar">
+                        <div class="module-progress-fill" style="width: 20%"></div>
+                    </div>
+                    <div class="module-stats">
+                        <span>1/5</span>
+                        <span>20%</span>
+                    </div>
+                </div>
+                <div class="module-item">
+                    <div class="module-name">📤 发布运营</div>
+                    <div class="module-progress-bar">
+                        <div class="module-progress-fill" style="width: 0%"></div>
+                    </div>
+                    <div class="module-stats">
+                        <span>0/5</span>
+                        <span>0%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="activity-section">
+            <div class="section-title">📜 最近活动</div>
+            <ul class="activity-list">
+                <li class="activity-item">
+                    <div class="activity-time">16:12</div>
+                    <div class="activity-content">
+                        <div class="activity-text">Frontend Design Skill 安装完成</div>
+                        <div class="activity-type type-feature">技能安装</div>
+                    </div>
+                </li>
+                <li class="activity-item">
+                    <div class="activity-time">15:47</div>
+                    <div class="activity-content">
+                        <div class="activity-text">Ralph AI Agent 系统安装完成</div>
+                        <div class="activity-type type-feature">系统安装</div>
+                    </div>
+                </li>
+                <li class="activity-item">
+                    <div class="activity-time">15:28</div>
+                    <div class="activity-content">
+                        <div class="activity-text">所有项目代码推送到 GitHub</div>
+                        <div class="activity-type type-commit">代码提交</div>
+                    </div>
+                </li>
+                <li class="activity-item">
+                    <div class="activity-time">15:22</div>
+                    <div class="activity-content">
+                        <div class="activity-text">Tavily Search API 配置成功</div>
+                        <div class="activity-type type-fix">配置完成</div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
