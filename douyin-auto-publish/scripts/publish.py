@@ -9,6 +9,12 @@ import sys
 import argparse
 import logging
 from pathlib import Path
+import codecs
+
+# 设置控制台编码
+if sys.platform == 'win32':
+    sys.stdout = codecs.getwriter('utf-8')(sys.stdout.buffer, 'strict')
+    sys.stderr = codecs.getwriter('utf-8')(sys.stderr.buffer, 'strict')
 
 # 添加项目根目录到路径
 sys.path.insert(0, '.')

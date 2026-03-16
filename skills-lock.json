@@ -95,6 +95,11 @@
       "source": "jimliu/baoyu-skills",
       "sourceType": "github",
       "computedHash": "77c2b19ff20837fe48b9969297cba183ba6c5dc1c4b1ff846b300b57befa4f32"
+    },
+    "tiktok-automation": {
+      "source": "sickn33/antigravity-awesome-skills",
+      "sourceType": "github",
+      "computedHash": "0aeec0836ba1743e58eb9f7bef2279e83c694b495c06054e4513aa6d30f67d51"
     }
   }
 }

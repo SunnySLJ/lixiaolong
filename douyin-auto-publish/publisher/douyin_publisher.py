@@ -40,7 +40,7 @@ class DouyinPublisher:
         
         # 抖音创作者页面
         self.creator_url = "https://creator.douyin.com/"
-        self.upload_url = "https://creator.douyin.com/upload"
+        self.upload_url = "https://creator.douyin.com/creator-micro/content/upload"
     
     async def login(self, profile: str = "default") -> bool:
         """
