@@ -1,0 +1,7 @@
+# 帧龙虾 Token 获取
+# 请在浏览器中打开 https://aihuanying.com/
+# 按 F12 打开开发者工具
+# 在 Console 执行：console.log(localStorage.getItem('token'))
+# 复制输出的 token 值粘贴到下面
+
+token = ""
