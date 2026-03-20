@@ -58,3 +58,9 @@ coverage/
 # 数据库
 *.db
 *.sqlite
+
+# 浏览器配置文件（包含敏感 cookies）
+.browser-profile/
+skills/*/.browser-profile/
+skills/*/cookies.json
+skills/*/*_cookies.json
