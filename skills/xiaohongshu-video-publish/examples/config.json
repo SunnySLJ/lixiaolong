@@ -1,0 +1,69 @@
+{
+  "$schema": "./config.schema.json",
+  "description": "小红书视频发布配置示例",
+  
+  "defaultTags": [
+    "#生活美学",
+    "#日常文案",
+    "#我的生活碎片",
+    "#每天都有值得记录的瞬间",
+    "#快乐瞬间"
+  ],
+  
+  "titlePatterns": [
+    {
+      "name": "主题副题式",
+      "pattern": "{主题}｜{副题}",
+      "examples": [
+        "春日随拍｜城市日常记录",
+        "美食探店｜这家店值得 N 刷",
+        "健身打卡｜30 天变化记录"
+      ]
+    },
+    {
+      "name": "情绪词式",
+      "pattern": "{情绪词}{对象}",
+      "examples": [
+        "今天的好心情是咖啡给的",
+        "被这家书店治愈了",
+        "偶遇街头艺术太惊喜了"
+      ]
+    },
+    {
+      "name": "疑问式",
+      "pattern": "{问题}",
+      "examples": [
+        "谁懂啊家人们",
+        "这是什么神仙配色",
+        "怎么会有这么好吃的店"
+      ]
+    }
+  ],
+  
+  "postTimes": [
+    "08:00",
+    "12:00",
+    "18:00",
+    "20:00",
+    "22:00"
+  ],
+  
+  "videoSettings": {
+    "maxSizeGB": 20,
+    "maxDurationHours": 4,
+    "recommendedResolution": "1080P",
+    "supportedFormats": ["mp4", "mov"]
+  },
+  
+  "browserSettings": {
+    "profile": "openclaw",
+    "timeoutMs": 30000,
+    "retryCount": 2
+  },
+  
+  "publishSettings": {
+    "waitUploadMs": 15000,
+    "waitPublishMs": 8000,
+    "intervalBetweenPostsMs": 30000
+  }
+}
